@@ -134,3 +134,70 @@ const result = pipe(
 )(5); // Start with 5, add 2, multiply by 3, and then square the result
 
 console.log(result); // Output: 441 (square(multiplyByThree(addTwo(5))))
+
+// -------------------------------------------------------------------------------------------------//
+
+// 9. Currying in JavaScript    
+
+// Regular function
+function add(x, y) {
+    return x + y;
+}
+
+// Curried version
+function curriedAdd(x) {
+    return function (y) {
+        return x + y;
+    };
+}
+
+// Usage
+const addTwo = curriedAdd(2); // Fixing the first argument
+console.log(addTwo(3)); // Output: 5
+
+
+// Currying using arrow functions
+
+const curriedAdd = x => y => x + y;
+const addTwo = curriedAdd(2);
+console.log(addTwo(3)); // Output: 5
+
+
+// Examples
+
+// 1. Event handlers
+
+// Regular event handler
+button.addEventListener('click', function (event) {
+    handleClick(event, data);
+});
+
+// Curried event handler
+const handleClickCurried = data => event => {
+    handleClick(event, data);
+};
+
+button.addEventListener('click', handleClickCurried(data));
+
+
+// 2. Api calls
+
+// Regular API request
+function fetchData(url, headers, callback) {
+    // Make request
+}
+
+// Curried API request
+const fetchDataCurried = url => headers => callback => {
+    // Make request with predefined URL, headers, and callback
+};
+
+const fetchUserData = fetchDataCurried('/api/user');
+const handleUserData = response => {
+    // Handle user data
+};
+
+fetchUserData({ Authorization: 'Bearer token' })(handleUserData);
+
+
+// -------------------------------------------------------------------------------------------------//
