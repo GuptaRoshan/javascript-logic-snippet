@@ -201,3 +201,51 @@ fetchUserData({ Authorization: 'Bearer token' })(handleUserData);
 
 
 // -------------------------------------------------------------------------------------------------//
+
+// 10. Async Iterators
+
+const urls = [
+    'https://api.github.com/users/github',
+    'https://api.github.com/users/microsoft',
+    'https://api.github.com/users/google'
+];
+
+async function* fetchUser(urls) {
+    for (const url of urls) {
+        const response = await fetch(url);
+        const user = await response.json();
+        yield user;
+    }
+}
+
+// Consume the async generator
+(async () => {
+    for await (const user of fetchUser(urls)) {
+        console.log(user.login);
+    }
+})();
+
+/**
+ *  Explanation:
+ * 
+ *  fetchUser(urls) returns an async iterator that fetches data for each given URL.
+ *  for await...of loop iterates over this iterator. On each iteration, 
+ *  it retrieves user data by doing await fetch(url) and await response.json(), and then yields this user data.
+ *  the console.log(user.login) inside the loop gets executed each time a new user value is yielded. This happens after the data for a user is fetched, asynchronously, one after the other. 
+ *  It will print github, microsoft, and google, the usernames of the respective URLs.
+ * 
+ */
+
+
+// Using async iterators with a while loop
+const users = fetchUser(urls);
+(async () => {
+    let result = await users.next();
+    while (!result.done) {
+        console.log(result.value.login);  //logs the login name of each user
+        result = await users.next();
+    }
+})();
+
+// -------------------------------------------------------------------------------------------------//
+
